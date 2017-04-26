@@ -28,10 +28,37 @@ public class UserService {
     @Autowired
     AccountRepository accountRepository;
 
-    public void createOrUpdate(User user) {
-        userRepository.save(user);
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public User createOrUpdate(User user) {
+        return userRepository.save(user);
     }
 
+    /**
+     *
+     * @return
+     */
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void delete(Long id) {
+        userRepository.delete(id);
+    }
+
+    /**
+     *
+     * @param user
+     * @param accounts
+     * @return
+     */
     public String linkAccountsToUser(User user, List<Account> accounts) {
         accounts.forEach(user::linkAccount);
         try {
@@ -42,6 +69,11 @@ public class UserService {
         }
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public double getUserWealth(User user) {
         final List<Account> userAccounts = accountRepository.findByUsers(singletonList(user));
         double wealth = 0;

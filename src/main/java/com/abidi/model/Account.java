@@ -1,16 +1,19 @@
 package com.abidi.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Currency;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Currency.getInstance;
 
 /**
  * Created by houssemabidi on 18/04/17.
  */
 @Entity
 @Table(name = "T_ACCOUNT")
-public class Account {
+public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +23,20 @@ public class Account {
     private Double balance;
     @Column(name = "CURRENCY")
     private String currency;
-    @Column(name = "RIB")//, unique = true)
+    @Column(name = "RIB", unique = true)
     private String rib;
     @ManyToMany(mappedBy = "accounts", cascade = CascadeType.ALL)
     private List<User> users;
 
     public Account() {
+    }
+
+    public Account(AccountBuilder accountBuilder) {
+        this.id = accountBuilder.id;
+        this.balance = accountBuilder.balance;
+        this.currency = accountBuilder.currency;
+        this.rib = accountBuilder.rib;
+        this.users = accountBuilder.users;
     }
 
     public Double getBalance() {
@@ -37,7 +48,7 @@ public class Account {
     }
 
     public Currency getCurrency() {
-        return Currency.getInstance(currency);
+        return getInstance(currency);
     }
 
     public void setCurrency(Currency currency) {
@@ -66,6 +77,43 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public static class AccountBuilder {
+
+        private Long id;
+        private final String rib;
+        private String currency;
+        private Double balance;
+        private List<User> users;
+
+        public AccountBuilder(String rib) {
+            this.rib = rib;
+        }
+
+        public AccountBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AccountBuilder balance(Double balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public AccountBuilder currency(String currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public AccountBuilder users(List<User> users) {
+            this.users = users;
+            return this;
+        }
+
+        public Account build() {
+            return new Account(this);
+        }
     }
 
 }

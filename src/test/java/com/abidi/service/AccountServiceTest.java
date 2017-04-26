@@ -1,7 +1,6 @@
 package com.abidi.service;
 
 import com.abidi.model.Account;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.List;

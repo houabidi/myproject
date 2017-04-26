@@ -1,13 +1,12 @@
 package com.abidi.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -22,11 +21,16 @@ import java.sql.SQLException;
 
 import static org.springframework.jdbc.datasource.DataSourceUtils.getConnection;
 import static org.springframework.jdbc.datasource.DataSourceUtils.releaseConnection;
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.abidi.repository" , "com.abidi.service" })
 @EnableTransactionManagement
 public class AppConfiguration {
+
+	private static final String PACKAGES_TO_SCAN = "com.abidi.model";
+
+	private static final String CLASS_PATH_RESOURCE = "data.sql";
 
 	/**
 	 * Bootstraps an in-memory HSQL database.
@@ -34,7 +38,7 @@ public class AppConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		return builder.setType(EmbeddedDatabaseType.HSQL).build();
+		return builder.setType(HSQL).build();
 	}
 
 	/**
@@ -49,7 +53,7 @@ public class AppConfiguration {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan("com.abidi.model");
+		factory.setPackagesToScan(PACKAGES_TO_SCAN);
 		factory.setDataSource(dataSource());
 
 		return factory;
@@ -68,7 +72,7 @@ public class AppConfiguration {
 	public ResourceDatabasePopulator populateDatabase() throws SQLException {
 
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.addScript(new ClassPathResource("data.sql"));
+		populator.addScript(new ClassPathResource(CLASS_PATH_RESOURCE));
 
 		Connection connection = null;
 
@@ -81,5 +85,13 @@ public class AppConfiguration {
 			}
 		}
 		return populator;
+	}
+
+	/**
+	 * map entity to dto and dto to entity
+	 */
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 }

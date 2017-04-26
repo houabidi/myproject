@@ -30,9 +30,19 @@ public class AccountService {
      * Method to create or update account
      *
      * @param account the account to save or update
+     * @return the saved acocunt
      */
-    public void createOrUpdate(Account account) {
-        accountRepository.save(account);
+    public Account createOrUpdate(Account account) {
+        return accountRepository.save(account);
+    }
+
+    /**
+     * Method to delete an account
+     *
+     * @param id the id of the account
+     */
+    public void delete(Long id) {
+        accountRepository.delete(id);
     }
 
     public List<Account> findAll() {
@@ -67,7 +77,12 @@ public class AccountService {
         return a != null ? SUCCESS + (a.getBalance() + sumToDeposit) : ERROR;
     }
 
-
+    /**
+     * Method to find accounts related to a given user
+     *
+     * @param user the user
+     * @return the user's list of accounts.
+     */
     public List<Account> findByUser(User user) {
         return accountRepository.findByUsers(singletonList(user));
     }
