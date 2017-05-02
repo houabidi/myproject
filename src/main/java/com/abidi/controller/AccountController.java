@@ -21,7 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 public class AccountController {
 
-    final static Logger LOGGER = getLogger(AccountController.class);
+    private final static Logger LOGGER = getLogger(AccountController.class);
 
     @Autowired
     AccountService accountService;

@@ -4,8 +4,6 @@ import com.abidi.model.Account;
 import com.abidi.model.User;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 

@@ -2,11 +2,7 @@ package com.abidi.controller;
 
 import com.abidi.dto.UserDTO;
 import com.abidi.model.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;

@@ -4,7 +4,7 @@ import com.abidi.model.Account;
 import com.abidi.model.User;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

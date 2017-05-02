@@ -1,43 +1,16 @@
 package com.abidi.controller;
 
 import com.abidi.dto.AccountDTO;
-import com.abidi.dto.AccountDTO;
 import com.abidi.model.Account;
 import com.abidi.model.Account.AccountBuilder;
-import com.abidi.model.Account;
 import org.junit.Test;
-import org.modelmapper.ModelMapper;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Arrays;
-
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 
 /**
