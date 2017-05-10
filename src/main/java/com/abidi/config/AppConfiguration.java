@@ -46,7 +46,6 @@ public class AppConfiguration {
 	 */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setDatabase(Database.HSQL);
 		vendorAdapter.setGenerateDdl(true);
@@ -61,7 +60,6 @@ public class AppConfiguration {
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {
-
 		JpaTransactionManager txManager = new JpaTransactionManager();
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
@@ -70,10 +68,8 @@ public class AppConfiguration {
 	@Bean
 	@Lazy(false)
 	public ResourceDatabasePopulator populateDatabase() throws SQLException {
-
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource(CLASS_PATH_RESOURCE));
-
 		Connection connection = null;
 
 		try {

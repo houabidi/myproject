@@ -11,7 +11,7 @@ import static java.util.Currency.getInstance;
  * Created by houssemabidi on 18/04/17.
  */
 @Entity
-@Table(name = "T_ACCOUNT")
+@Table(name = "T_ACCOUNT")// , uniqueConstraints = @UniqueConstraint(columnNames = "RIB", name = "RIB_UC"))
 public class Account implements Serializable {
 
     @Id
@@ -22,7 +22,7 @@ public class Account implements Serializable {
     private Double balance;
     @Column(name = "CURRENCY")
     private String currency;
-    @Column(name = "RIB", unique = true)
+    @Column(name = "RIB")
     private String rib;
     @ManyToMany(mappedBy = "accounts", cascade = CascadeType.ALL)
     private List<User> users;

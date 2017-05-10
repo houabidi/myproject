@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Column(name = "LAST_NAME")
     private String lastName;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JoinTable(name = "USER_ACCOUNT", joinColumns = {@JoinColumn(name = "USER_ID")},
+    @JoinTable(name = "T_USER_ACCOUNT", joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ACCOUNT_ID")})
     private List<Account> accounts;
 
