@@ -85,6 +85,14 @@ public class AccountService {
         return accountRepository.findByUsers(singletonList(user));
     }
 
+    /**
+     * @param rib the rib
+     * @return the account with the given rib
+     */
+    public Account findByRib(String rib) {
+        return accountRepository.findByRib(rib);
+    }
+
     public void setAccountRepository(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }

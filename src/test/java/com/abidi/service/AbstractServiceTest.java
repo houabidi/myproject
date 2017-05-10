@@ -1,6 +1,5 @@
 package com.abidi.service;
 
-import com.abidi.config.AppConfiguration;
 import com.abidi.model.Account;
 import com.abidi.model.User;
 import com.abidi.repository.AccountRepository;
@@ -10,10 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.Currency;
 

@@ -59,7 +59,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete("/1"))
+        mockMvc.perform(delete("/deleteUser/1"))
                 .andExpect(status().isOk());
 
     }

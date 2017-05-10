@@ -70,8 +70,13 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete("/1"))
+        mockMvc.perform(delete("/deleteAccount/1"))
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void findByRib() {
+        // TODO
     }
 }

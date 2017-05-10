@@ -36,7 +36,7 @@ public class AppConfiguration {
 	 * Bootstraps an in-memory HSQL database.
 	 */
 	@Bean
-	public DataSource dataSource() {
+	public static DataSource dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
 		return builder.setType(HSQL).build();
 	}
@@ -67,7 +67,7 @@ public class AppConfiguration {
 
 	@Bean
 	@Lazy(false)
-	public ResourceDatabasePopulator populateDatabase() throws SQLException {
+	public static ResourceDatabasePopulator populateDatabase() throws SQLException {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource(CLASS_PATH_RESOURCE));
 		Connection connection = null;

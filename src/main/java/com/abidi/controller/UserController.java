@@ -6,6 +6,8 @@ import com.abidi.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  * Created by houssemabidi on 25/04/17.
  */
+@RestController
 public class UserController {
 
     final static Logger LOGGER = getLogger(UserController.class);
@@ -54,14 +57,9 @@ public class UserController {
         return modelMapper.map(userUpdated, UserDTO.class);
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE)
-    public String delete(@PathVariable(name = "id") Long id) {
+    @RequestMapping(value = "deleteUser/{id}", method = DELETE)
+    public void delete(@PathVariable(name = "id") Long id) {
         LOGGER.info("Deleting user");
-        try {
-            userService.delete(id);
-            return "success";
-        } catch (Exception e) {
-            return "Error";
-        }
+        userService.delete(id);
     }
 }

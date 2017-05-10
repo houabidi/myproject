@@ -19,6 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  * Created by houssemabidi on 25/04/17.
  */
+@RestController
 public class AccountController {
 
     private final static Logger LOGGER = getLogger(AccountController.class);
@@ -35,6 +36,13 @@ public class AccountController {
         LOGGER.info("Getting all accounts");
         List<Account> accounts = accountService.findAll();
         return accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(toList());
+    }
+
+    @RequestMapping(value = "/accountByRib/{rib}", method = GET)
+    @ResponseBody
+    public AccountDTO findByRib(@PathVariable(name = "rib") String rib) {
+        Account account = accountService.findByRib(rib);
+        return account != null ? modelMapper.map(account, AccountDTO.class) : null;
     }
 
     @RequestMapping(value = "/account/add" , method = POST)
@@ -54,14 +62,9 @@ public class AccountController {
         return modelMapper.map(accountUpdated, AccountDTO.class);
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE)
-    public String delete(@PathVariable(name = "id") Long id) {
+    @RequestMapping(value = "/deleteAccount/{id}", method = DELETE)
+    public void delete(@PathVariable(name = "id") Long id) {
         LOGGER.info("Deleting account");
-        try {
-            accountService.delete(id);
-            return "success";
-        } catch (Exception e) {
-            return "Error";
-        }
+        accountService.delete(id);
     }
 }
