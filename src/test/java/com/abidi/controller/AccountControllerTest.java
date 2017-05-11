@@ -83,7 +83,14 @@ public class AccountControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void findByRib() {
-        // TODO
+    public void testFindByRib() throws Exception {
+
+        final Account account = new AccountBuilder("rib")
+                .balance(1000d)
+                .currency("EUR")
+                .build();
+        when(accountService.findByRib("rib")).thenReturn(account);
+        when(modelMapper.map(account, AccountDTO.class)).thenReturn(new AccountDTO());
+        mockMvc.perform(get("/accountByRib/rib")).andExpect(status().isOk());
     }
 }

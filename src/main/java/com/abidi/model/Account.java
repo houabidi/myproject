@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  * Created by houssemabidi on 18/04/17.
  */
 @Entity
-@Table(name = "T_ACCOUNT")// , uniqueConstraints = @UniqueConstraint(columnNames = "RIB", name = "RIB_UC"))
+@Table(name = "T_ACCOUNT", uniqueConstraints = @UniqueConstraint(columnNames = "RIB", name = "RIB_UC"))
 public class Account implements Serializable {
 
     @Id

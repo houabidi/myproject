@@ -1,6 +1,7 @@
 package com.abidi.repository;
 
 import com.abidi.config.AppConfiguration;
+import com.abidi.config.TestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by houssemabidi on 19/04/17.
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfiguration.class)
+@ContextConfiguration(classes = {AppConfiguration.class, TestConfig.class})
 public class AbstractRepositoryTest {
 
     @Autowired

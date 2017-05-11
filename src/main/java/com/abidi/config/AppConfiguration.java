@@ -30,8 +30,6 @@ public class AppConfiguration {
 
 	private static final String PACKAGES_TO_SCAN = "com.abidi.model";
 
-	private static final String CLASS_PATH_RESOURCE = "data.sql";
-
 	/**
 	 * Bootstraps an in-memory HSQL database.
 	 */
@@ -63,24 +61,6 @@ public class AppConfiguration {
 		JpaTransactionManager txManager = new JpaTransactionManager();
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
-	}
-
-	@Bean
-	@Lazy(false)
-	public static ResourceDatabasePopulator populateDatabase() throws SQLException {
-		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.addScript(new ClassPathResource(CLASS_PATH_RESOURCE));
-		Connection connection = null;
-
-		try {
-			connection = getConnection(dataSource());
-			populator.populate(connection);
-		} finally {
-			if (connection != null) {
-				releaseConnection(connection, dataSource());
-			}
-		}
-		return populator;
 	}
 
 	/**
