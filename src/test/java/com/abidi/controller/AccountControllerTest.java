@@ -8,6 +8,7 @@ import org.junit.Test;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -48,11 +49,14 @@ public class AccountControllerTest extends AbstractControllerTest {
     public void testCreate() throws Exception {
 
         final Account account = new Account.AccountBuilder("rib").build();
+        final AccountDTO accountDTO = new AccountDTO();
+        final String jsonInString = convertObjectToJson(accountDTO);
 
         when(accountService.createOrUpdate(any())).thenReturn(account);
         when(modelMapper.map(account, AccountDTO.class)).thenReturn(new AccountDTO());
         mockMvc.perform(post("/account/add")
-                .requestAttr("accountDTO",new AccountDTO()))
+                .contentType(APPLICATION_JSON)
+                .content(jsonInString))
                 .andExpect(status().isCreated());
     }
 
@@ -60,11 +64,14 @@ public class AccountControllerTest extends AbstractControllerTest {
     public void testUpdate() throws Exception {
 
         final Account account = new Account.AccountBuilder("rib").build();
+        final AccountDTO accountDTO = new AccountDTO();
+        final String jsonInString = convertObjectToJson(accountDTO);
 
         when(accountService.createOrUpdate(any())).thenReturn(account);
-        when(modelMapper.map(account, AccountDTO.class)).thenReturn(new AccountDTO());
+        when(modelMapper.map(account, AccountDTO.class)).thenReturn(accountDTO);
         mockMvc.perform(put("/account/update")
-                .requestAttr("accountDTO",new AccountDTO()))
+                .contentType(APPLICATION_JSON)
+                .content(jsonInString))
                 .andExpect(status().isOk());
     }
 

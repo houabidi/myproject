@@ -2,6 +2,8 @@ package com.abidi.controller;
 
 import com.abidi.service.AccountService;
 import com.abidi.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,4 +51,15 @@ public class AbstractControllerTest {
         assertThat(userController).isNotNull();
     }
 
+    /**
+     * Method to convert object to json
+     *
+     * @param obj the object to convert
+     * @return the json string
+     * @throws JsonProcessingException the exception
+     */
+    String convertObjectToJson(Object obj) throws JsonProcessingException {
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(obj);
+    }
 }

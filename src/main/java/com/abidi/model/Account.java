@@ -1,11 +1,15 @@
 package com.abidi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Currency;
 import java.util.List;
 
 import static java.util.Currency.getInstance;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Created by houssemabidi on 18/04/17.
@@ -15,16 +19,21 @@ import static java.util.Currency.getInstance;
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "ACCOUNT_ID")
     private Long id;
+
     @Column(name = "BALANCE")
     private Double balance;
+
     @Column(name = "CURRENCY")
     private String currency;
+
     @Column(name = "RIB")
     private String rib;
-    @ManyToMany(mappedBy = "accounts", cascade = CascadeType.ALL)
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "accounts", cascade = ALL)
     private List<User> users;
 
     public Account() {

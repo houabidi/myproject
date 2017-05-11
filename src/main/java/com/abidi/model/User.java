@@ -1,9 +1,17 @@
 package com.abidi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Created by houssemabidi on 18/04/17.
@@ -13,14 +21,18 @@ import java.util.List;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "USER_ID")
     private Long id;
+
     @Column(name = "FIRST_NAME")
     private String firstName;
+
     @Column(name = "LAST_NAME")
     private String lastName;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+
+    @JsonIgnore
+    @ManyToMany(cascade = {PERSIST, DETACH, REMOVE}, fetch = EAGER)
     @JoinTable(name = "T_USER_ACCOUNT", joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ACCOUNT_ID")})
     private List<Account> accounts;

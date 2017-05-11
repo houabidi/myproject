@@ -6,7 +6,6 @@ import com.abidi.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,8 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -24,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class UserController {
 
-    final static Logger LOGGER = getLogger(UserController.class);
+    private final static Logger LOGGER = getLogger(UserController.class);
 
     @Autowired
     UserService userService;
@@ -34,32 +33,32 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = GET)
     @ResponseBody
-    public List<UserDTO> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         LOGGER.info("Getting all users");
         List<User> users = userService.findAll();
-        return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(toList());
+        List<UserDTO> userDTOList = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(toList());
+        return isEmpty(userDTOList) ? new ResponseEntity<>(NO_CONTENT) : new ResponseEntity<>(userDTOList, OK);
     }
 
-    @RequestMapping(value = "/user/add" , method = POST)
-    @ResponseStatus(CREATED)
+    @RequestMapping(value = "/user/add", method = POST)
     @ResponseBody
-    public UserDTO create(@RequestAttribute(name = "userDTO") UserDTO userDTO) {
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
         LOGGER.info("Creating user");
         final User userCreated = userService.createOrUpdate(modelMapper.map(userDTO, User.class));
-        return modelMapper.map(userCreated, UserDTO.class);
+        return new ResponseEntity<>(modelMapper.map(userCreated, UserDTO.class), CREATED);
     }
 
     @RequestMapping(value = "/user/update", method = PUT)
-    @ResponseStatus(OK)
-    public UserDTO update(@RequestAttribute(name = "userDTO") UserDTO userDTO) {
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
         LOGGER.info("Updating user");
         final User userUpdated = userService.createOrUpdate(modelMapper.map(userDTO, User.class));
-        return modelMapper.map(userUpdated, UserDTO.class);
+        return new ResponseEntity<>(modelMapper.map(userUpdated, UserDTO.class), OK);
     }
 
     @RequestMapping(value = "deleteUser/{id}", method = DELETE)
-    public void delete(@PathVariable(name = "id") Long id) {
-        LOGGER.info("Deleting user");
+    public ResponseEntity<UserDTO> delete(@PathVariable(name = "id") Long id) {
+        LOGGER.info("Deleting user with id" + id);
         userService.delete(id);
+        return new ResponseEntity<>(OK);
     }
 }

@@ -6,14 +6,15 @@ import com.abidi.service.AccountService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -32,39 +33,42 @@ public class AccountController {
 
     @RequestMapping(value = "/accounts", method = GET)
     @ResponseBody
-    public List<AccountDTO> findAll() {
+    public ResponseEntity<List<AccountDTO>> findAll() {
         LOGGER.info("Getting all accounts");
         List<Account> accounts = accountService.findAll();
-        return accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class)).collect(toList());
+        List<AccountDTO> accountDTOList = accounts.stream().map(account -> modelMapper.map(account, AccountDTO.class))
+                .collect(toList());
+        return isEmpty(accountDTOList) ? new ResponseEntity<>(NO_CONTENT) : new ResponseEntity<>(accountDTOList, OK);
+
     }
 
     @RequestMapping(value = "/accountByRib/{rib}", method = GET)
     @ResponseBody
-    public AccountDTO findByRib(@PathVariable(name = "rib") String rib) {
-        Account account = accountService.findByRib(rib);
-        return account != null ? modelMapper.map(account, AccountDTO.class) : null;
+    public ResponseEntity<AccountDTO> findByRib(@PathVariable(name = "rib") String rib) {
+        final Account account = accountService.findByRib(rib);
+        return account != null ? new ResponseEntity<>(modelMapper.map(account, AccountDTO.class), OK) :
+                new ResponseEntity<>(NOT_FOUND);
     }
 
-    @RequestMapping(value = "/account/add" , method = POST)
-    @ResponseStatus(CREATED)
+    @RequestMapping(value = "/account/add", method = POST)
     @ResponseBody
-    public AccountDTO create(@RequestAttribute(name = "accountDTO") AccountDTO accountDTO) {
+    public ResponseEntity<AccountDTO> create(@RequestBody AccountDTO accountDTO) {
         LOGGER.info("Creating account");
         final Account accountCreated = accountService.createOrUpdate(modelMapper.map(accountDTO, Account.class));
-        return modelMapper.map(accountCreated, AccountDTO.class);
+        return new ResponseEntity<>(modelMapper.map(accountCreated, AccountDTO.class), CREATED);
     }
 
     @RequestMapping(value = "/account/update", method = PUT)
-    @ResponseStatus(OK)
-    public AccountDTO update(@RequestAttribute(name = "accountDTO") AccountDTO accountDTO) {
+    public ResponseEntity<AccountDTO> update(@RequestBody AccountDTO accountDTO) {
         LOGGER.info("Updating account");
         final Account accountUpdated = accountService.createOrUpdate(modelMapper.map(accountDTO, Account.class));
-        return modelMapper.map(accountUpdated, AccountDTO.class);
+        return new ResponseEntity<>(modelMapper.map(accountUpdated, AccountDTO.class), OK);
     }
 
     @RequestMapping(value = "/deleteAccount/{id}", method = DELETE)
-    public void delete(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<AccountDTO> delete(@PathVariable(name = "id") Long id) {
         LOGGER.info("Deleting account");
         accountService.delete(id);
+        return new ResponseEntity<>(OK);
     }
 }

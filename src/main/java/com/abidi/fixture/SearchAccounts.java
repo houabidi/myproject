@@ -5,6 +5,7 @@ import com.abidi.dto.AccountDTO;
 import fitlibrary.DoFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class SearchAccounts extends DoFixture{
      */
     public boolean search() {
         try {
-            accounts = accountController.findAll();
+            final ResponseEntity<List<AccountDTO>> responseEntity = accountController.findAll();
+            accounts = responseEntity.getBody();
         } catch (Exception e) {
             return false;
         }

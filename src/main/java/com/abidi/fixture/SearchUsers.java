@@ -5,6 +5,7 @@ import com.abidi.dto.UserDTO;
 import fitlibrary.DoFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class SearchUsers extends DoFixture{
      */
     public boolean search() {
         try {
-            users = userController.findAll();
+            final ResponseEntity<List<UserDTO>> responseEntity = userController.findAll();
+            users = responseEntity.getBody();
         } catch (Exception e) {
             return false;
         }
