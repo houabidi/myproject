@@ -6,6 +6,8 @@ import com.abidi.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -37,7 +40,7 @@ public class UserController {
         LOGGER.info("Getting all users");
         List<User> users = userService.findAll();
         List<UserDTO> userDTOList = users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(toList());
-        return isEmpty(userDTOList) ? new ResponseEntity<>(NO_CONTENT) : new ResponseEntity<>(userDTOList, OK);
+        return isEmpty(userDTOList) ? new ResponseEntity<>(NO_CONTENT) : new ResponseEntity<>(userDTOList, responseHeaders(), OK);
     }
 
     @RequestMapping(value = "/user/add", method = POST)
@@ -60,5 +63,13 @@ public class UserController {
         LOGGER.info("Deleting user with id" + id);
         userService.delete(id);
         return new ResponseEntity<>(OK);
+    }
+
+    private HttpHeaders responseHeaders() {
+        final HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(APPLICATION_JSON);
+        responseHeaders.add("Access-Control-Allow-Origin", "*");
+        responseHeaders.add("Access-Control-Allow-Methods", "*");
+        return responseHeaders;
     }
 }
